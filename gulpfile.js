@@ -10,7 +10,7 @@ var sequence = require('gulp-sequence');
 const distFolder = 'dist';
 const webFolder = 'web';
 
-gulp.task('build', ['scripts', 'styles', 'markup']);
+gulp.task('build', ['scripts', 'styles', 'markup', 'icons', 'assets']);
 gulp.task('release', sequence('clean', 'build'));
 
 gulp.task('clean', function () {
@@ -42,10 +42,22 @@ gulp.task('markup', function () {
         .pipe(gulp.dest(distFolder));
 });
 
+gulp.task('icons', function () {
+    return gulp.src(path.join(webFolder, '**/*.ico'))
+        .pipe(gulp.dest(distFolder));
+});
+
+gulp.task('assets', function () {
+    return gulp.src(path.join(webFolder, '**/*.jpg'))
+        .pipe(gulp.dest(distFolder));
+});
+
 gulp.task('watch', ['build'], function () {
     gulp.watch([path.join(webFolder, '**/*.ts')], ['scripts']);
     gulp.watch([path.join(webFolder, '**/*.scss')], ['styles']);
     gulp.watch([path.join(webFolder, '**/*.html')], ['markup']);
+    gulp.watch([path.join(webFolder, '**/*.ico')], ['icons']);
+    gulp.watch([path.join(webFolder, '**/*.jpg')], ['assets']);
 });
 
 gulp.task('default', ['release']);
